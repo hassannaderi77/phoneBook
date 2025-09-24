@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         path: "/",
         maxAge: 60 * 60 * 2,
         sameSite: "none", // برای cross-site fetch
-        secure: process.env.NODE_ENV === "production",
+        secure: true
       })
     );
 

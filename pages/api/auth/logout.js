@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         path: "/",
         maxAge: 0,
         sameSite: "none", // برای cross-site fetch
-        secure: true,
+        secure: true
       })
     );
     return res.status(200).json({ message: "User Logged Out Successfully" });
