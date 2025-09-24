@@ -1,6 +1,6 @@
 import User from "@/models/User"
 import connectDB from "@/utils/connectDB"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { serialize } from "cookie"
 
