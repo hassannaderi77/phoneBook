@@ -1,39 +1,19 @@
-// import mongoose from "mongoose";
-
-// export default async function connectDB() {
-//   try {
-//     if (mongoose.connection[0].readyState) return;
-//     await mongoose.connect("mongodb://localhost:27017/next-phone")
-//     console.log("connected to db succsessfully")
-//   } catch (error) {
-//     console.log("connection failed")
-//   }
-// }
-
-// mongoose
-//   .connect("mongodb://localhost:27017/next-phone")
-//   .then(() => {
-//     if (mongoose.connection[0].readyState) return;
-//     console.log("connected to db succsessfully");
-//   })
-//   .catch((error) => console.log(error));
-
-// connectDB.js
 import mongoose from "mongoose";
 
-const connectDB = async () => {
-
-  if (mongoose.connections[0].readyState) return;
-
+export default async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("✅ MongoDB connected successfully");
+    if (mongoose.connection[0].readyState) return;
+    await mongoose.connect(process.env.MONGODB_URI)
+    console.log("connected to db succsessfully")
   } catch (error) {
-    console.error("MongoDB connection failed:", error);
+    console.log("connection failed")
   }
-};
+}
 
-export default connectDB;
+mongoose
+  .connect("mongodb://localhost:27017/next-phone")
+  .then(() => {
+    if (mongoose.connection[0].readyState) return;
+    console.log("connected to db succsessfully");
+  })
+  .catch((error) => console.log(error));

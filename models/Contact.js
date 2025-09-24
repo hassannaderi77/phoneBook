@@ -1,33 +1,41 @@
-import { Schema, models, model } from "mongoose";
+import mongoose, { models, model, Schema } from "mongoose"
 
 const contactSchema = new Schema({
-  firstName: {
-    type: String,
-    trim: true,
-    minLength: [3, "حداقل 3 کاراکتر وارد کنید"],
-    maxLength: [15, "حداکثر 15 کاراکتر وارد کنید"],
-  },
-  lastName: {
-    type: String,
-    trim: true,
-    minLength: [3, "حداقل 3 کاراکتر وارد کنید"],
-    maxLength: [15, "حداکثر 15 کاراکتر وارد کنید"],
-  },
-  age: {
-    type: String,
-    min: [17, "سن بالای 17 باشد"]
-  },
-  gender: {
-    type: String,
-  },
-  phone: {
-    type: String,
-    trim: true,
-    maxLength: [11, "شماره وارد شده باید 11 رقم باشد" ],
-    match: [/09\d{9}/, "پیش شماره باید با 09 باشد و شامل 11 کاراکتر"]
-  },
-});
+   firstName: {
+      type: String,
+      trim: true,
+      minLength: [3 , 'نام باید حداقل 3 کاراکتر باشه'],
+      maxLength: [15 , 'نام باید حداکثر 15 کاراکتر باشه']
+   },
+   lastName: {
+      type: String,
+      trim: true,
+      minLength: 3,
+      maxLength: 15
+   },
+   age: {
+      type: Number,
+      min : [18 , 'سن باید بیشتر از 18 باشه']
+   },
+   gender: {
+      type: String
+   },
+   phone: {
+      type: String,
+      trim: true,
+      maxLength: [11 , 'شماره تلفن نباید بیشتر از 11 رقم باشه'],
+      match: [/09\d{9}/ , 'شماره تلفن باید با 09 بشه و شامل 11 رقم باشه']
+   },
+   favorite: {
+      type : Boolean,
+      default: false
+   },
+   userId : {
+      type : mongoose.Types.ObjectId,
+      ref : 'User'
+   }
+})
 
-const Contact = models.Contact || model("Contact", contactSchema);
+const Contact = models.Contact || model("Contact", contactSchema)
 
-export default Contact;
+export default Contact

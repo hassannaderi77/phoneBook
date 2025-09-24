@@ -12,11 +12,25 @@
    color: rgb(57, 57, 57);
    font-size: 14px;
 }
-.container input {
+.container form > input {
    all: unset;
    border: 1px solid gray;
    border-radius: 5px;
    padding: 10px;
+}
+.container .password input{
+   all: unset;
+}
+.container .password{
+   border: 1px solid gray;
+   border-radius: 5px;
+   padding: 10px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.container .password svg{
+   cursor: pointer;
 }
 .container select {
    all: unset;
@@ -32,17 +46,26 @@
    background-color: rgb(3, 157, 3);
    font-weight: 600;
    color: white;
+   cursor: pointer;
 }
+.notRegistered{
+   text-align: center;
+   color: gray;
+}
+.notRegistered a{
+   text-decoration: none;
+   color: rgb(3, 157, 3);
 
-.spin {
+}
+.spin{
    animation: spinner 1s linear infinite;
 }
 
 @keyframes spinner {
-   0% {
+   0%{
       transform: rotate(0deg);
    }
-      100% {
+   100%{
       transform: rotate(360deg);
    }
 }

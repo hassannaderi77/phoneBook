@@ -5,23 +5,28 @@ import styles from "@/styles/Contacts.module.css"
 import toast, { Toaster } from "react-hot-toast"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import validatToken from "@/utils/auth"
+import generateFilter from "@/utils/generateFilter"
+import { MdOutlineFavoriteBorder } from "react-icons/md"
 
-
-export default function Contacts({ contactsList }) {
+export default function Contacts({ contactsList, userId }) {
    const [contacts, setContacts] = useState(contactsList)
    const [searchKey, setSearchKey] = useState("")
    const [searchGen, setSearchGen] = useState("")
+   const [favStatus, setFavStatus] = useState(false)
    const router = useRouter()
-   const {gen , search} = router.query
+   const { gen, search } = router.query
 
    useEffect(() => {
-      gen ? setSearchGen(gen) : setSearchGen('')
-      search ? setSearchKey(search) : setSearchKey('')
-   } , [])
+      gen ? setSearchGen(gen) : setSearchGen("")
+      search ? setSearchKey(search) : setSearchKey("")
+   }, [])
 
    const searchHandler = async () => {
       try {
-         const res = await fetch(`/api/contacts?gen=${searchGen}&search=${searchKey}`)
+         const res = await fetch(
+            `/api/contacts?userId=${userId}&gen=${searchGen}&search=${searchKey}`
+         )
          const data = await res.json()
          setContacts(data)
       } catch (error) {
@@ -29,22 +34,43 @@ export default function Contacts({ contactsList }) {
       }
    }
 
+   const showFavoriteHandler = () => {
+      if (favStatus) {
+         setContacts(contactsList)
+      } else {
+         const favoriteContacts = contacts.filter((contact) => contact.favorite == true)
+         setContacts(favoriteContacts)
+      }
+
+      setFavStatus(!favStatus)
+   }
    return (
       <>
          <Toaster position='top-right' />
          <div className={styles.searchContainer}>
             <input
                type='text'
-               value={searchKey}
                onChange={(e) => setSearchKey(e.target.value)}
                placeholder='enter name or family'
+               value={searchKey}
             />
-            <select value={searchGen} onChange={(e) => setSearchGen(e.target.value)}>
-               <option value=''>all</option>
-               <option value='male'>male</option>
-               <option value='female'>female</option>
+            <select onChange={(e) => setSearchGen(e.target.value)}>
+               <option value='' selected={searchGen == ""}>
+                  all
+               </option>
+               <option value='male' selected={searchGen == "male"}>
+                  male
+               </option>
+               <option value='female' selected={searchGen == "female"}>
+                  female
+               </option>
             </select>
             <button onClick={searchHandler}>search</button>
+            <MdOutlineFavoriteBorder
+               size='35px'
+               fill={favStatus ? "red" : "black"}
+               onClick={showFavoriteHandler}
+            />
          </div>
          {contacts.length > 0 && (
             <>
@@ -64,38 +90,18 @@ export default function Contacts({ contactsList }) {
 }
 
 export async function getServerSideProps(context) {
-   await connectDB()
-   let contacts = null
-   const { gen, search } = context.query
-   if (gen && search) {
-      // /contacts?gen=value&search=value
-      if (gen == "male" || gen == "female") {
-         contacts = await Contact.find({
-            $and: [{ gender: gen }, { $or: [{ firstName: search }, { lastName: search }] }]
-         })
-      } else {
-         contacts = await Contact.find({ $or: [{ firstName: search }, { lastName: search }] })
-      }
-   } else if (gen) {
-      // /contacts?gen=value
-      if (gen == "male") {
-         contacts = await Contact.find({ gender: "male" })
-      } else if (gen == "female") {
-         contacts = await Contact.find({ gender: "female" })
-      } else {
-         contacts = await Contact.find()
-      }
-   } else if (search) {
-      // contacts?search=value
-      contacts = await Contact.find({ $or: [{ firstName: search }, { lastName: search }] })
-   } else {
-      // /contacts
-      contacts = await Contact.find()
+   const payload = validatToken(context)
+   if (!payload) {
+      return { redirect: { destination: "/auth/login" } }
    }
+
+   const userId = payload.userId
+   const filter = generateFilter(context.query, userId)
+
+   await connectDB()
+   const contacts = await Contact.find(filter)
 
    return {
-      props: { contactsList: JSON.parse(JSON.stringify(contacts)) }
+      props: { contactsList: JSON.parse(JSON.stringify(contacts)), userId }
    }
 }
-
-// localhost:port/contacts
