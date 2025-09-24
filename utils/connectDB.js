@@ -1,19 +1,12 @@
 import mongoose from "mongoose";
 
 export default async function connectDB() {
+  if (mongoose.connection.readyState) return; // جلوگیری از multiple connection
   try {
-    if (mongoose.connection[0].readyState) return;
-    await mongoose.connect(process.env.MONGODB_URI)
-    console.log("connected to db succsessfully")
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to DB successfully");
   } catch (error) {
-    console.log("connection failed")
+    console.error("Connection failed:", error);
+    throw new Error("DB connection failed");
   }
 }
-
-mongoose
-  .connect("mongodb://localhost:27017/next-phone")
-  .then(() => {
-    if (mongoose.connection[0].readyState) return;
-    console.log("connected to db succsessfully");
-  })
-  .catch((error) => console.log(error));
