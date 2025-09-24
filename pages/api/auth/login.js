@@ -49,11 +49,11 @@ export default async function handler(req, res) {
     res.setHeader(
       "Set-Cookie",
       serialize("token", token, {
-        httpOnly: true, //XSS
+        httpOnly: true,
         path: "/",
-        maxAge: 60 * 60 * 2,
-        sameSite: "none",
-        secure: true,
+        maxAge: 60 * 60 * 2, // 2h
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: process.env.NODE_ENV === "production",
       })
     );
 
