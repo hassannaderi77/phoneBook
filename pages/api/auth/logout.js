@@ -12,8 +12,8 @@ export default async function handler(req, res) {
         httpOnly: true, //XSS
         path: "/",
         maxAge: 0,
-        sameSite: "none", // برای cross-site fetch
-        secure: true
+        sameSite: "none",
+        secure: true,
       })
     );
     return res.status(200).json({ message: "User Logged Out Successfully" });

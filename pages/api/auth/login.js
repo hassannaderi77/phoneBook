@@ -52,8 +52,8 @@ export default async function handler(req, res) {
         httpOnly: true, //XSS
         path: "/",
         maxAge: 60 * 60 * 2,
-        sameSite: "none", // برای cross-site fetch
-        secure: true
+        sameSite: "none",
+        secure: true,
       })
     );
 

@@ -25,9 +25,12 @@ export default function Contacts({ contactsList, userId }) {
   const searchHandler = async () => {
     try {
       const res = await fetch(
-        `/api/contacts?userId=${userId}&gen=${searchGen}&search=${searchKey}`,
-        { credentials: "include" } 
-      );
+   `/api/contacts?userId=${userId}&gen=${searchGen}&search=${searchKey}`,
+   {
+      method: "GET",
+      credentials: "include"
+   }
+)
       const data = await res.json();
       setContacts(data);
     } catch (error) {

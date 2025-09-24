@@ -52,7 +52,7 @@ export default function AddContact({ userId }) {
       method: "POST",
       body: JSON.stringify({ ...formData, userId }),
       headers: { "Content-Type": "application/json" },
-      credentials: "include", 
+      credentials: "include"
     });
     const data = await res.json();
     setLoading(false);
