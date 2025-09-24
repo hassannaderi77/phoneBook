@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             httpOnly: true, //XSS
             path: "/",
             maxAge: 0,
-            sameSite: "strict" //CSRF
+            sameSite: "lax" //CSRF
          })
       )
       return res.status(200).json({ message: "User Logged Out Successfully" })

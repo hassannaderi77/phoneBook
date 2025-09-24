@@ -48,7 +48,7 @@ export default async function handler(req, res) {
             httpOnly: true, //XSS
             path: "/",
             maxAge: 60 * 60 * 2,
-            sameSite: "strict" //CSRF
+            sameSite: "lax" //CSRF
          })
       )
 
@@ -57,4 +57,4 @@ export default async function handler(req, res) {
       res.status(500).json({ message: "server error" })
    }
 }
-// localhost:port/api/auth/register
+// localhost:port/api/auth/login
