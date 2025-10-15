@@ -26,3 +26,14 @@
    border-radius: 15px;
    margin: 10px auto;
 }
+
+@media (min-width: 330px) and (max-width: 600px) {
+  .searchContainer {
+   flex-direction: column;
+   width: auto;
+   gap: 10px;
+  }
+  .noAudience {
+   width: auto;
+  }
+}

@@ -21,3 +21,13 @@
 .active svg {
    color: rgb(3, 170, 3);
 }
+
+@media (min-width: 330px) and (max-width: 600px) {
+  .menu {
+    gap: 0;
+  }
+
+  .menu a {
+    font-size: 12px;
+  }
+}
